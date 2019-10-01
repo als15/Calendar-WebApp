@@ -1,9 +1,8 @@
 <template>
   <div class="overlay">
-    <button @click.prevent="$emit('close')">close</button>
-    <form action class="form">
-      <div class="form-group">
-        <label for="title" class="control-label">Title</label>
+    <form @submit="onSubmit($event)" class="form">
+      <div>
+        <label for="title" class="control-label">{{$t('Title')}}</label>
         <input
           name="title"
           type="text"
@@ -15,31 +14,21 @@
           :disabled="locked"
         />
       </div>
-      <div class="form-group">
-        <label for="date" class="control-label">date</label>
+      <div>
+        <label for="date" class="control-label">{{$t('date')}}</label>
         <input type="date" name="date" v-model="form.date" :disabled="locked" />
       </div>
 
-      <div class="form-group">
-        <label for="time" class="control-label">time</label>
+      <div>
+        <label for="time" class="control-label">{{$t('time')}}</label>
         <input type="time" name="time" id="time" v-model="form.time" :disabled="locked" />
       </div>
 
-      <div class="form-group">
-        <label for="description" class="control-label">description</label>
+      <button @click.prevent="addGuests = true">{{$t('Add Guests')}}</button>
+      <div v-if="addGuests">
+        <label for="guests" class="control-label"></label>
         <input
-          type="description"
-          name="description"
-          id="description"
-          v-model="form.desc"
-          :disabled="locked"
-        />
-      </div>
-
-      <button @click.prevent="addGuests = true">Add Guests</button>
-      <div class="form-group" v-if="addGuests">
-        <label for="guests" class="control-label">guests</label>
-        <input
+          placeholder="Guest name"
           type="text"
           name="guests"
           id="guests"
@@ -49,18 +38,31 @@
       </div>
 
       <div class="guest" v-if="form.guests.length">
-        <p>guests list</p>
+        <p>{{$t('guests list')}}</p>
         <div class="guest-name" v-for="guest in form.guests" :key="guest">{{guest}}</div>
       </div>
 
-      <div class="form-group lock">
-        <label for="locked" class="control-label">locked</label>
-        <input type="radio" name="locked" value="true" v-model="form.locked" :disabled="locked" />
-        <label for="locked" class="control-label">unlocked</label>
-        <input type="radio" name="unlocked" value="false" v-model="form.locked" :disabled="locked" />
+      <div>
+        <label for="description" class="control-label">{{$t('description')}}</label>
+        <input
+          type="description"
+          name="description"
+          id="description"
+          v-model="form.desc"
+          :disabled="locked"
+        />
       </div>
 
-      <button @click="onSubmit($event)" v-if="!locked">save</button>
+      <div>
+        <p>{{$t('locked')}}</p>
+        <label class="switch">
+          <input type="checkbox" v-model="form.locked" :disabled="locked" />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <button v-if="!locked">{{$t('save')}}</button>
+      <button @click.prevent="$emit('close')">{{$t('cancel')}}</button>
     </form>
   </div>
 </template>
@@ -79,7 +81,7 @@ export default {
         time: null,
         desc: "",
         guests: [],
-        locked: null
+        locked: false
       },
       locked: false,
       addGuests: false
@@ -169,15 +171,24 @@ export default {
 form {
   min-width: 25%;
   margin: auto;
-  background: #f2f0ec;
+  background: #fff;
   padding: 25px;
   border-radius: 4px;
+  box-shadow: 0px 0px 2px 0px #fff;
+
+  button {
+    border: none;
+    font-size: 16px;
+    background: none;
+    cursor: pointer;
+    margin: 5px 10px 0 0;
+  }
 }
 
 label {
   display: inline-block;
   max-width: 100%;
-  margin-bottom: 5px;
+  margin: 5px 0;
   font-weight: 700;
 }
 
@@ -192,8 +203,58 @@ input {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
-
 .lock {
   display: flex;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
 }
 </style>

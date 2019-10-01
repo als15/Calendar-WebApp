@@ -6,8 +6,8 @@
       <div v-for="day in daysNames" :key="day">{{day}}</div>
     </div>
     <div class="table table-body">
-      <div class="week" v-for="week in month">
-        <div class="day" v-for="day in week" @click="addEvent(day)">
+      <div class="week" v-for="(week,w ) in month" :key="w">
+        <div class="day" v-for="(day,d) in week" @click="addEvent(day)" :key="`${w}-${d}`">
           <p>{{day.getDate()}}</p>
           <div class="events" v-if="hasEvents(day)">
             <div

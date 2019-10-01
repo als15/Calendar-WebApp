@@ -44,4 +44,13 @@ p {
   font-size: 22px;
   color: rgba(255, 255, 255, 0.6);
 }
+
+button {
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  color: #e0e0e0;
+  text-transform: capitalize;
+  cursor: pointer;
+}
 </style>
